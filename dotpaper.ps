@@ -1,21 +1,19 @@
 %!PS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% dotpaper.ps $Revision$ : Prints out variable sized spaced dot paper.
-% Release $Name:  $ (Only defined if checked out as a specific release)
+% dotpaper.ps : Prints out variable sized spaced dot paper.
 %
-% by Daniel C. Nygren $Date$
+% by Daniel C. Nygren
 % E-mail: dan.nygren@gmail.com
-% Permanent E-mail: Dan.Nygren@alumni.clemson.edu
 %
 % Copyright 2019 by Daniel C. Nygren
 %
 %   Permission to use and modify this software for any purpose other than
-% its incorporation into a commercial product is hereby granted without fee. 
+% its incorporation into a commercial product is hereby granted without fee.
 % Permission to copy and distribute this software only for non-commercial use
-% is also granted without fee, provided that the above copyright notice and 
-% this entire permission notice appear in all copies and any supporting 
+% is also granted without fee, provided that the above copyright notice and
+% this entire permission notice appear in all copies and any supporting
 % documentation. The author makes no representations about the suitability of
-% this software for any purpose. It is provided "as is" without express or 
+% this software for any purpose. It is provided "as is" without express or
 % implied warranty.
 %
 %   This program prints out spaced dot paper on a PostScript printer.
@@ -54,50 +52,49 @@
 %                       (N. Describe anything a maintainer should be aware of)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%               REVISIONS
-%
-% $Log$
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % --- Defines ---
 
-% By convention, all my variables have a underscore in them, and my 
+% By convention, all my variables have a underscore in them, and my
 % procedures start with a capital letter. (Except for the ubiquitous "inch")
 
-%If you have a duplex printer, you have the option of printing on both sides
-/paper_sides {2} def     %Enter 1 to print squares on one side, 2 for both.
+/#copies 1 def              % Enter number of copies to print out
 
-/line_darkness {0.5} def %Change setgray darkness of lines (0 = black)
-/line_width {0.5} def    %Change setlinewidth thickness (0 = thinnest possible)
+% If you have a duplex printer, you have the option of printing on both sides
+/paper_sides {2} def     % Enter 1 to print squares on one side, 2 for both.
 
-/side_size {0.31} def    %Enter length of a square side in inches
-/dot_size {10} def       %Enter size of dot as a fraction of side size
+/line_darkness {0.5} def % Change setgray darkness of lines (0 = black)
+/line_width {0.5} def    % Change setlinewidth thickness (0 = thinnest possible)
+
+/side_size {0.19685} def % 0.5 cm % Enter length of a square side in inches
+/dot_size {10} def       % Enter size of dot as a fraction of side size
                          % (i.e. the larger number the smaller the dot)
 
-/paper_width {8.5} def   %Enter paper width in inches
-/paper_height {11} def   %Enter paper height in inches
-/paper_margin {0.75} def %Enter paper margin in inches
+/paper_width {8.5} def   % Enter paper width in inches
+/paper_height {11} def   % Enter paper height in inches
+/paper_margin {0.75} def % Enter paper margin in inches
 % If you would rather specify your sizes in millimeters, comment out the
-% above four lines and uncomment the below eight lines. 
-%/side_size_in_mm {6.35} def            %Enter length of a square side in mm
-%/side_size {side_size_in_mm 25.4 div} def    %millimeters/25.4 = inches
-%/paper_width_in_mm {215.9} def         %Enter paper width in mm
-%/paper_width {paper_width_in_mm 25.4 div} def %millimeters/25.4 = inches
-%/paper_height_in_mm {279.4} def        %Enter paper height in mm
-%/paper_height {paper_height_in_mm 25.4 div} def %millimeters/25.4 = inches
-%/paper_margin_in_mm {6.35} def         %Enter paper margin in mm
-%/paper_margin {paper_margin_in_mm 25.4 div} def %millimeters/25.4 = inches
+% above four lines and uncomment the below eight lines.
+%/side_size_in_mm {6.35} def            % Enter length of a square side in mm
+%/side_size {side_size_in_mm 25.4 div} def    % millimeters/25.4 = inches
+%/paper_width_in_mm {215.9} def         % Enter paper width in mm
+%/paper_width {paper_width_in_mm 25.4 div} def % millimeters/25.4 = inches
+%/paper_height_in_mm {279.4} def        % Enter paper height in mm
+%/paper_height {paper_height_in_mm 25.4 div} def % millimeters/25.4 = inches
+%/paper_margin_in_mm {6.35} def         % Enter paper margin in mm
+%/paper_margin {paper_margin_in_mm 25.4 div} def  % millimeters/25.4 = inches
 
 %^^^^^^^^^^^^^^ You should only have to change things above here ^^^^^^^^^^^^^^
 
 % --- Calculations ---
 
 % Calculate how many squares will fit across the paper's width
-/this_many_squares_wide {paper_width paper_margin 2 mul sub side_size div floor} bind def
+/this_many_squares_wide {paper_width paper_margin 2 mul sub side_size div floor}
+ bind def
 
 % Calculate how many squares will fit across the paper's height
-/this_many_squares_high {paper_height paper_margin 2 mul sub side_size div floor} bind def
+/this_many_squares_high {paper_height paper_margin 2 mul sub side_size div floor
+} bind def
 
 /inch {72 mul} bind def
 
@@ -110,7 +107,7 @@ paper_sides{
     line_darkness setgray
     line_width setlinewidth
 
-    newpath    %Start with a clean slate
+    newpath    % Start with a clean slate
 
 % --- Calculate where to start printing so the squares are centered ---
 
@@ -120,7 +117,7 @@ paper_sides{
     % Then see how much room they will take up
     side_size mul
 
-    % Then subtract from paper width and divide by 2 to find out where to start 
+    % Then subtract from paper width and divide by 2 to find out where to start
     % printing. This x coordinate is left on the stack.
     paper_width exch sub 2 div inch
 
@@ -134,13 +131,13 @@ paper_sides{
     % start printing. This y coordinate is left on the stack.
     paper_height exch sub 2 div inch
 
-    %Start printing at the calculated origin
+    % Start printing at the calculated origin
     moveto
 
     % Construct the squares by drawing a series of horizontal lines followed by
     % a series of vertical lines.
 
-    currentpoint %Save origin
+    currentpoint % Save origin
 
     % For dot paper, simply draw a highly asymmetrical dashed line
     % Offset the dashed line so it makes crosses at horizontal and vertical
@@ -151,28 +148,28 @@ paper_sides{
     % Loop counts must be integers, so cvi is used to convert to integers.
 
     this_many_squares_high cvi{
-        currentpoint    %Save current point
-        h_line          %Draw a horizontal line
-        moveto          %Move back to starting point saved with currentpoint
-        0 side_size inch rmoveto %Move to start next line
+        currentpoint    % Save current point
+        h_line          % Draw a horizontal line
+        moveto          % Move back to starting point saved with currentpoint
+        0 side_size inch rmoveto % Move to start next line
 
     }repeat
 
-    h_line  %Add last line, it takes N+1 lines to make N squares
+    h_line  % Add last line, it takes N+1 lines to make N squares
 
-    moveto  %Move back to origin
+    moveto  % Move back to origin
 
     this_many_squares_wide cvi{
-        currentpoint    %Save current point
-        v_line          %Draw a vertical line
-        moveto          %Move back to starting point saved with currentpoint
-        side_size inch 0 rmoveto %Move to start next line
+        currentpoint    % Save current point
+        v_line          % Draw a vertical line
+        moveto          % Move back to starting point saved with currentpoint
+        side_size inch 0 rmoveto % Move to start next line
 
     }repeat
 
-    v_line %Add last line, it takes N+1 lines to make N squares
+    v_line % Add last line, it takes N+1 lines to make N squares
 
-    stroke %Paint the line on the current path for this row
+    stroke % Paint the line on the current path for this row
 
     showpage
 
